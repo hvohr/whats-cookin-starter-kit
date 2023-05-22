@@ -154,22 +154,33 @@ function showSearchResults() {
 };
 
 function showSavedSearchResults() {
-  let searchValue = savedSearchInput.value
-  removeHiddenClass([allFilterDisplay])
+  let searchValue = savedSearchInput.value;
+  removeHiddenClass([allFilterDisplay]);
   addHiddenClass([frontRecipeDisplay]);
-  savedRecipeDisplay.innerHTML = ''
-  recipesfromName(recipesToCook, searchValue).forEach(recipe =>
-    savedRecipeDisplay.innerHTML += `<div class = "recipe-wrapper">
-    <img id="${recipe.name}" src="${recipe.image}" class="recipe">
-    <div class = "recipe-info">
-      <p>${recipe.name}</p>
-    </div>`)
-}
+  savedRecipeDisplay.innerHTML = '';
+  const filteredRecipes = recipesfromName(recipesToCook, searchValue);
+  if (filteredRecipes.length === 0) {
+    savedRecipeDisplay.innerHTML = `
+      <div class="no-recipe-found-message">
+        <p>Sorry, ${currentUser.name}, you currently don't recipes saved matching that description.</p>
+      </div>`;
+  } else {
+    filteredRecipes.forEach(recipe => {
+      savedRecipeDisplay.innerHTML += `
+        <div class="recipe-wrapper">
+          <img id="${recipe.name}" src="${recipe.image}" class="recipe">
+          <div class="recipe-info">
+            <p>${recipe.name}</p>
+          </div>
+        </div>`;
+    });
+  };
+};
 
 function showHomePage() {
   addHiddenClass([allRecipeDisplay], [allFilterDisplay]);
   removeHiddenClass([frontRecipeDisplay]);
-}
+};
 
 const showSavedRecipes = (currentUser, recipesToCook) => {
   if (recipesToCook.length === 0) {
@@ -188,7 +199,7 @@ const showSavedRecipes = (currentUser, recipesToCook) => {
           <button class="delete-recipe-button ${recipe.name}" id="${recipe.name}">🗑️</button>
         </div>
       </div>`});
-  }
+  };
 };
 
 function renderFilteredSavedRecipes() {
