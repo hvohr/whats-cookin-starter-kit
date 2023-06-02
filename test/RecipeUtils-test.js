@@ -1,5 +1,5 @@
 import { expect } from 'chai';
-import { recipesFromTag, recipesfromName, findRecipe, displayIngredients, calculateRecipeCost, recipeInstructions, shuffleData } from '../src/recipeUtils';
+import { recipesFromTag, recipesfromName, findRecipe, displayIngredients, calculateRecipeCost, recipeInstructions, shuffleData, recipesFromPrice } from '../src/recipeUtils';
 import recipeData from '../src/data/recipes-sample.js';
 import ingredientsData from '../src/data/ingredients-sample.js';
 import { recipesToCook, saveRecipe } from '../src/userUtils';
@@ -145,5 +145,20 @@ describe('shuffleData', () => {
     const shuffled = shuffleData(recipeData)
     
     expect(shuffled).to.not.equal(recipeData)  
+  });
+});
+
+describe('recipesFromPrice', () => {
+  it('should be a function', () => {
+    expect(recipesFromPrice).to.be.a('function');
+  });
+
+  it('should filter recipes based on user budget', () => {
+    const maxCost = (200);
+    const recipes = recipeData;
+    const ingredients = ingredientsData;
+    const filteredRecipes = recipesFromPrice(recipes, maxCost, ingredients);
+    
+    expect(filteredRecipes.length).to.equal(2);
   });
 });
