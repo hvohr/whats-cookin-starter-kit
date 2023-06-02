@@ -51,6 +51,13 @@ const shuffleData = (recipes) => {
   return
 }
 
+const recipesFromPrice = (recipes, maxCost, ingredients) => {
+  return recipes.filter((recipe) => {
+    const cost = calculateRecipeCost(recipe, ingredients);
+    return cost <= maxCost;
+  });
+}
+
 export {
   recipesFromTag,
   recipesfromName,
@@ -59,4 +66,5 @@ export {
   recipeInstructions,
   shuffleData,
   displayIngredients,
+  recipesFromPrice
 }
