@@ -159,6 +159,24 @@ aside {
   align-items: center;
   font-size: 17px;
   justify-content: space-between;
+  flex-direction: row-reverse;
+}
+
+.input-budget {
+  font-size: 13px;
+  margin-bottom: 30px;
+  display: flex;
+  align-items: center;
+  flex-direction: column-reverse;
+}
+
+.budget-input-box {
+  width: 40px;
+  margin-bottom: 16px;
+}
+
+.input-label {
+  text-align: center;
 }
 
 /* RECIPE PAGE */
