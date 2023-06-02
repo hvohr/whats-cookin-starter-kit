@@ -1,7 +1,7 @@
 //NOTE: Your DOM manipulation will occur in this file
 import { recipesfromName, recipesFromTag, findRecipe, calculateRecipeCost, recipeInstructions, shuffleData, displayIngredients } from "../src/recipeUtils";
 import { recipesToCook, saveRecipe, deleteRecipe, addSavedRecipesToUser } from "../src/userUtils";
-import { getData } from "./apiCalls"
+import { getUsers, getIngredients, getRecipes, addPostRecipe } from "./apiCalls"
 
 var currentUser;
 
@@ -24,6 +24,13 @@ const clearButton = document.querySelector('.clear-search-button')
 const searchButton = document.querySelector('.search-button')
 
 //Event Listeners
+
+const startFetch = () => {
+  Promise.all([getRecipes(), getUsers(), getIngredients()]).then((data) => {
+    let usersData1 = data[1].users
+    console.log(usersData1)
+    let ingredientsData1 = data[2].ingredients
+    let recipesData1 = data[0].recipes
 
 allRecipesButton.addEventListener('click', event => {
   showRecipes(event);
@@ -356,10 +363,15 @@ function addHiddenClass(elements) {
   return elements.forEach(element => element.classList.add('hidden'));
 };
 
-export {
-  showRecipes,
-  removeHiddenClass,
-  addHiddenClass,
-  showHomePage,
-  randomizeHomePage
+})
 }
+
+startFetch()
+
+// export {
+//   showRecipes,
+//   removeHiddenClass,
+//   addHiddenClass,
+//   showHomePage,
+//   randomizeHomePage
+// }
