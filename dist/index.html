@@ -6,16 +6,18 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;700&display=swap" rel="stylesheet">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Recipes for everyone's taste!"/>
 </head>
 <body>
   <header>
-    <h1 class = "title">What's Cookin?</h1>
+    <h1 class="title" tabindex="0">What's Cookin?</h1>
     <nav class="navbar">
       <button class="all-recipes">All Recipes</button>
       <div class="search-bar-input">
-        <input class = "nav-search-bar" id = "search-bar" type="text" placeholder=" Search...">
-        <input class = "saved-search hidden" id = "saved-search-bar" type="text" placeholder=" Search Saved Recipes...">
-        <button class = "search-button">Search</button>
+        <input aria-label="search-all-recipes" class="nav-search-bar" id="search-bar" type="text" placeholder=" Search...">
+        <input aria-label="search-saved-recipes" class="saved-search hidden" id="saved-search-bar" type="text" placeholder=" Search Saved Recipes...">
+        <button class="search-button">Search</button>
       </div>
       <button class = "clear-search-button">Clear Search</button>
       <button class="saved-recipes">Saved Recipes</button>
@@ -23,19 +25,19 @@
   </header>
   <main>
     <article class="front-recipe-display" id="front-display">
-      <div class = "recipe-wrapper">
+      <div class = "recipe-wrapper" tabindex="0">
         <img id="front-recipe-1" src="https://spoonacular.com/recipeImages/741603-556x370.jpeg" class="recipe">
         <div class = "recipe-info">
           <p>Elvis Pancakes</p>
         </div>
       </div>
-      <div class = "recipe-wrapper">
+      <div class = "recipe-wrapper" tabindex="0">
         <img id="front-recipe-2" src="https://spoonacular.com/recipeImages/562334-556x370.jpg" class="recipe">
         <div class = "recipe-info">
           <p>Udi's GF Bread</p>
         </div>
       </div>
-      <div class = "recipe-wrapper">
+      <div class = "recipe-wrapper" tabindex="0">
         <img id="front-recipe-3" src="https://spoonacular.com/recipeImages/507921-556x370.jpg" class="recipe">
         <div class = "recipe-info">
           <p>Cupcake?</p>
@@ -126,7 +128,10 @@
       </div>
     </section>
     <div class="save-recipe-button hidden">
-      <button class="save-recipe-btn">Save Recipe</button>
+      <button class="save-recipe-btn">Save Recipe ♡</button>
+    </div>
+    <div class="saved-recipe-button hidden">
+      <button class="saved-recipe-btn">Saved Recipe ❤️ </button>
     </div>
     <section class="saved-recipe-display hidden">
       <div class="recipe-wrapper">

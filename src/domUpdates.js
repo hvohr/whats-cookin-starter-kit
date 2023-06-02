@@ -16,7 +16,8 @@ const savedSearchInput = document.getElementById('saved-search-bar')
 const recipeTitle = document.querySelector('h2');
 const singleRecipeDisplay = document.querySelector('.single-recipe-display');
 const homeButton = document.querySelector('.title')
-const saveRecipeButton = document.querySelector('.save-recipe-button')
+const saveWhiteHeartButton = document.querySelector('.save-recipe-button')
+const savedRedHeartButton = document.querySelector('.saved-recipe-button')
 const savedRecipesButton = document.querySelector('.saved-recipes')
 const savedRecipeDisplay = document.querySelector('.saved-recipe-display')
 const clearButton = document.querySelector('.clear-search-button')
@@ -26,22 +27,24 @@ const searchButton = document.querySelector('.search-button')
 
 allRecipesButton.addEventListener('click', event => {
   showRecipes(event);
-  addHiddenClass([saveRecipeButton, savedRecipeDisplay, savedSearchInput, allRecipesButton])
+  addHiddenClass([saveWhiteHeartButton, savedRedHeartButton, savedRecipeDisplay, savedSearchInput, allRecipesButton])
   removeHiddenClass([searchInput, savedRecipesButton])
 });
 
 savedRecipesButton.addEventListener('click', () => {
-  addHiddenClass([allRecipeDisplay, singleRecipeDisplay, saveRecipeButton, savedRecipesButton, frontRecipeDisplay, searchInput]);
+  addHiddenClass([allRecipeDisplay, singleRecipeDisplay, saveWhiteHeartButton, savedRedHeartButton, savedRecipesButton, frontRecipeDisplay, searchInput]);
   removeHiddenClass([savedRecipeDisplay, savedSearchInput, allFilterDisplay, allRecipesButton]);
   showSavedRecipes(currentUser, recipesToCook);
 })
 
-saveRecipeButton.addEventListener('click', event => {
+saveWhiteHeartButton.addEventListener('click', event => {
   getData('recipes').then(({ recipes }) => {
     if (event.target.classList.contains('save-recipe-btn')) {
       const recipeName = recipeTitle.innerText;
       addSavedRecipesToUser(currentUser, recipesToCook)
       saveRecipe(recipes, recipeName);
+      removeHiddenClass([savedRedHeartButton]);
+      addHiddenClass([saveWhiteHeartButton]);
     }
   })
 });
@@ -50,12 +53,17 @@ allFilterDisplay.addEventListener('click', function (event) {
   if (event.target.classList.contains('checkbox')) {
     renderFilteredRecipes(event);
     renderFilteredSavedRecipes(event);
+    addHiddenClass([saveWhiteHeartButton, savedRedHeartButton])
+  }
+  if (event.target.classList.contains('recipe')) {
+    checkCurrentSavedRecipes(event)
+    viewSelectedRecipe(event)
   }
 });
 
 searchInput.addEventListener('keypress', function (e) {
   if (e.key === 'Enter') {
-    addHiddenClass([singleRecipeDisplay, saveRecipeButton]);
+    addHiddenClass([singleRecipeDisplay, saveWhiteHeartButton]);
     showSearchResults();
   }
 });
@@ -68,7 +76,7 @@ savedSearchInput.addEventListener('keypress', function (e) {
 })
 
 searchButton.addEventListener('click', function () {
-  addHiddenClass([singleRecipeDisplay, saveRecipeButton]);
+  addHiddenClass([singleRecipeDisplay, saveWhiteHeartButton, savedRedHeartButton]);
   if(savedSearchInput.classList[1] === 'hidden') {
     showSearchResults();
   } else if (searchInput.classList[1] === 'hidden') {
@@ -86,18 +94,20 @@ clearButton.addEventListener('click', function (e) {
   }
 })
 
-allRecipeDisplay.addEventListener('click', function (event) {
+allRecipeDisplay.addEventListener('click', event => {
   if (event.target.classList.contains('recipe')) {
-    addHiddenClass([allRecipeDisplay, allRecipesButton]);
-    removeHiddenClass([singleRecipeDisplay, saveRecipeButton]);
+    checkCurrentSavedRecipes(event)
+    addHiddenClass([allRecipeDisplay]);
+    removeHiddenClass([singleRecipeDisplay]);
     viewSelectedRecipe(event);
-  }
+  };
 });
 
 frontRecipeDisplay.addEventListener('click', function (event) {
   if (event.target.classList.contains('recipe')) {
+    checkCurrentSavedRecipes(event)
     addHiddenClass([allRecipeDisplay, frontRecipeDisplay, savedSearchInput, savedRecipeDisplay]);
-    removeHiddenClass([singleRecipeDisplay, saveRecipeButton, searchInput, allRecipesButton]);
+    removeHiddenClass([singleRecipeDisplay, searchInput, allRecipesButton]);
     viewSelectedRecipe(event);
   }
 });
@@ -106,6 +116,7 @@ savedRecipeDisplay.addEventListener('click', event => {
   if (event.target.classList.contains('recipe')) {
     addHiddenClass([savedRecipeDisplay, savedSearchInput]);
     removeHiddenClass([singleRecipeDisplay, savedRecipesButton]);
+    checkCurrentSavedRecipes(event)
     viewSelectedRecipe(event);
   }
   if (event.target.classList.contains('delete-recipe-button')) {
@@ -118,7 +129,7 @@ savedRecipeDisplay.addEventListener('click', event => {
 
 
 homeButton.addEventListener('click', function () {
-  addHiddenClass([saveRecipeButton, savedRecipeDisplay, singleRecipeDisplay, allFilterDisplay, savedSearchInput])
+  addHiddenClass([saveWhiteHeartButton, savedRedHeartButton, savedRecipeDisplay, singleRecipeDisplay, allFilterDisplay, savedSearchInput])
   removeHiddenClass([savedRecipesButton, searchInput, allRecipesButton])
   showHomePage();
   randomizeHomePage();
@@ -153,15 +164,24 @@ function showSearchResults() {
     } else {
       searchedRecipes.forEach(recipe => {
         allRecipeDisplay.innerHTML += `
-          <div class="recipe-wrapper">
-            <img id="${recipe.name}" src="${recipe.image}" class="recipe" alt="${recipe.name}">
-            <div class="recipe-info">
-              <p>${recipe.name}</p>
+          <div class="recipe-wrapper recipe" tabindex="0" id="${recipe.name}" >
+            <img src="${recipe.image}" class="recipe" alt="${recipe.name}">
+            <div class="recipe-info recipe">
+              <p class="recipe">${recipe.name}</p>
             </div>
           </div>`;
       });
     };
   });
+};
+
+const checkCurrentSavedRecipes= event => {
+  const recipeFound = currentUser.recipesToCook.some(recipe => recipe.name.includes(event.target.parentElement.id));
+  if (recipeFound) {
+    removeHiddenClass([savedRedHeartButton]);
+  } else {
+    removeHiddenClass([saveWhiteHeartButton]);
+  }
 };
 
 function showSavedSearchResults() {
@@ -178,10 +198,10 @@ function showSavedSearchResults() {
   } else {
     filteredRecipes.forEach(recipe => {
       savedRecipeDisplay.innerHTML += `
-        <div class="recipe-wrapper">
-          <img id="${recipe.name}" src="${recipe.image}" class="recipe alt="${recipe.name}">
-          <div class="recipe-info">
-            <p>${recipe.name}</p>
+        <div class="recipe-wrapper recipe" tabindex="0" id="${recipe.name}">
+          <img src="${recipe.image}" class="recipe alt="${recipe.name}">
+          <div class="recipe-info recipe">
+            <p class="recipe>${recipe.name}</p>
             <button class="delete-recipe-button ${recipe.name}" name="${recipe.name}">🗑️</button>
           </div>
         </div>`;
@@ -204,10 +224,10 @@ const showSavedRecipes = (currentUser, recipesToCook) => {
     savedRecipeDisplay.innerHTML = '';
     recipesToCook.forEach(recipe => {
       savedRecipeDisplay.innerHTML += `
-      <div class="recipe-wrapper">
-        <img id="${recipe.name}" src="${recipe.image}" class="recipe" alt="${recipe.name}">
-        <div class="recipe-info">
-          <p>${recipe.name}</p>
+      <div class="recipe-wrapper recipe" tabindex="0" id="${recipe.name}" >
+        <img src="${recipe.image}" class="recipe" alt="${recipe.name}">
+        <div class="recipe-info recipe">
+          <p class="recipe">${recipe.name}</p>
           <button class="delete-recipe-button ${recipe.name}" name="${recipe.name}">🗑️</button>
         </div>
       </div>`});
@@ -222,12 +242,13 @@ function renderFilteredSavedRecipes() {
   }
   let savedFiltered = recipesFromTag(recipesToCook, savedTags);
   savedRecipeDisplay.innerHTML = '';
-  savedFiltered.forEach(recipe => savedRecipeDisplay.innerHTML += `<div class = "recipe-wrapper">
-      <img id="${recipe.name}" src="${recipe.image}" class="recipe" alt="${recipe.name}">
-      <div class = "recipe-info">
-        <p>${recipe.name}</p>
+  savedFiltered.forEach(recipe => savedRecipeDisplay.innerHTML += ` 
+    <div class="recipe-wrapper recipe" tabindex="0" id="${recipe.name}">
+      <img src="${recipe.image}" class="recipe" alt="${recipe.name}">
+      <div class="recipe-info recipe">
+      <p class="recipe">${recipe.name}</p>
         <button class="delete-recipe-button ${recipe.name}" name="${recipe.name}">🗑️</button>
-      </div>`);
+      </div>`)
   if (!savedFiltered.length) {
     savedRecipeDisplay.innerHTML = `
     <div class="no-recipe-found-message">
@@ -242,26 +263,26 @@ function randomizeHomePage() {
     frontRecipeDisplay.innerHTML = '';
     for (let i = 0; i < recipes.length; i++) {
       frontRecipeDisplay.innerHTML = `
-      <div class = "recipe-wrapper">
-        <img id="${recipes[0].name}" src="${recipes[0].image}" class="recipe" alt="${recipes[0].name}">
-        <div class="recipe-info">
-          <p>${recipes[0].name}</p>
-        </div>
-        </div>
-      <div class = "recipe-wrapper">
-        <img id="${recipes[1].name}" src="${recipes[1].image}" class="recipe" alt="${recipes[1].name}">
-        <div class = "recipe-info">
-          <p>${recipes[1].name}</p>
-        </div>
+      <div class="recipe-wrapper recipe" tabindex="0" id="${recipes[0].name}">
+      <img src="${recipes[0].image}" class="recipe" alt="${recipes[0].name}">
+      <div class="recipe-info recipe">
+        <p>${recipes[0].name}</p>
       </div>
-      <div class = "recipe-wrapper">
-        <img id="${recipes[2].name}" src="${recipes[2].image}" class="recipe" alt="${recipes[2].name}">
-        <div class = "recipe-info">
-          <p>${recipes[2].name}</p>
-        </div>`
+      </div>
+    <div class="recipe-wrapper recipe" tabindex="0" id="${recipes[1].name}">
+      <img src="${recipes[1].image}" class="recipe" alt="${recipes[1].name}">
+      <div class = "recipe-info recipe">
+        <p>${recipes[1].name}</p>
+      </div>
+    </div>
+    <div class = "recipe-wrapper recipe" tabindex="0" id="${recipes[2].name}" >
+      <img src="${recipes[2].image}" class="recipe" alt="${recipes[2].name}">
+      <div class = "recipe-info recipe">
+        <p>${recipes[2].name}</p>
+      </div>`
     }
   })
-}
+};
 
 function renderFilteredRecipes() {
   const tags = Array.from(checkCategories).filter((category) => category.checked).map(c => c.id)
@@ -272,10 +293,11 @@ function renderFilteredRecipes() {
   getData('recipes').then(({ recipes }) => {
     let filtered = recipesFromTag(recipes, tags);
     allRecipeDisplay.innerHTML = '';
-    filtered.forEach(recipe => allRecipeDisplay.innerHTML += `<div class = "recipe-wrapper">
-      <img id="${recipe.name}" src="${recipe.image}" class="recipe" alt="${recipe.name}">
-      <div class = "recipe-info">
-        <p>${recipe.name}</p>
+    filtered.forEach(recipe => allRecipeDisplay.innerHTML += `
+    <div class="recipe-wrapper recipe" tabindex="0" id="${recipe.name}">
+      <img src="${recipe.image}" class="recipe" alt="${recipe.name}">
+      <div class="recipe-info recipe">
+      <p class="recipe">${recipe.name}</p>
       </div>`)
     if (!filtered.length) {
       allRecipeDisplay.innerHTML = `
@@ -291,26 +313,26 @@ const viewSelectedRecipe = event => {
   singleRecipeDisplay.innerHTML = '';
   getData('ingredients').then(({ ingredients }) => {
     getData('recipes').then(({ recipes }) => {
-      const recipeName = event.target.id;
+      const recipeName = event.target.parentElement.id
       const selectedRecipe = findRecipe(recipes, recipeName);
       const recipeCost = calculateRecipeCost(selectedRecipe, ingredients);
       const ingredientsInfo = displayIngredients(recipes, ingredients, recipeName)
       const instructions = recipeInstructions(selectedRecipe);
       addHiddenClass([allFilterDisplay]);
       singleRecipeDisplay.innerHTML += `
-  <div class="recipe-page-header">
-    <h2>${selectedRecipe.name}</h2>
-    <img class="single-recipe-img" id="${selectedRecipe.id}" src="${selectedRecipe.image}" class="recipe" alt='${selectedRecipe.name}'>
-  </div>
-  <div class="recipe-page-body">
-    <p class="total-cost-box">This recipe costs a total of: $${recipeCost} to make!</p>
-    <p class="ingredient-box">The ingredients you will need to make this recipe are: <br> ${ingredientsInfo}</p>
-    <p class="instruction-box">Instructions: <br> ${instructions}</p>
-  </div>`;
+      <div class="recipe-page-header">
+        <h2>${selectedRecipe.name}</h2>
+        <img class="single-recipe-img" id="${selectedRecipe.id}" src="${selectedRecipe.image}" class="recipe" alt='${selectedRecipe.name}'>
+      </div>
+      <div class="recipe-page-body">
+        <p class="total-cost-box">This recipe costs a total of: $${recipeCost} to make!</p>
+        <p class="ingredient-box">The ingredients you will need to make this recipe are: <br> ${ingredientsInfo}</p>
+        <p class="instruction-box">Instructions: <br> ${instructions}</p>
+      </div>`;
       recipeTitle.innerText = `${selectedRecipe.name}`;
     })
   })
-}
+};
 
 function showRecipes() {
   removeHiddenClass([allRecipeDisplay, allFilterDisplay]);
@@ -318,10 +340,10 @@ function showRecipes() {
   allRecipeDisplay.innerHTML = ''
   getData('recipes').then(({ recipes }) => {
     recipes.forEach(recipe => allRecipeDisplay.innerHTML += `
-  <div class = "recipe-wrapper">
-    <img id="${recipe.name}" src="${recipe.image}" class="recipe" alt="${recipe.name}">
-  <div class = "recipe-info">
-    <p>${recipe.name}</p>
+  <div class="recipe-wrapper recipe" tabindex="0" id="${recipe.name}">
+    <img src="${recipe.image}" class="recipe" alt="${recipe.name}">
+  <div class = "recipe-info recipe">
+    <p class="recipe">${recipe.name}</p>
   </div>`);
   })
 };

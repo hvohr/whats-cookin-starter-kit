@@ -24,7 +24,7 @@ nav {
   display: flex;
   justify-content: center;
   align-items: center;
-  justify-content: space-around
+  justify-content: space-around;
 }
 
 button {
@@ -47,6 +47,7 @@ button:hover {
   width: 40vw;
   flex-grow: 2;
 }
+
 
 .search-button {
   background-color: #D81159;
@@ -109,28 +110,28 @@ main {
   flex-direction: column;
   cursor: pointer;
   margin-bottom: 5vh;
+  width: 300px;
+  border-radius: 12px;
 }
 
+.recipe {
+  border-radius: 12px 12px 0 0;
+}
+
+.recipe-info {
+  border-radius: 0 0 12px 12px;
+}
 
 .recipe-wrapper:hover {
   filter: drop-shadow(8px 8px 4px);
   transition: 0.7s;
 }
 
-.recipe-info {
-  width: 300px;
-  border-radius: 0 0 12px 12px;
-}
-
-.recipe {
-  width: 310px;
-  border-radius: 12px 12px 0 0;
-}
-
 /* ALL RECIPES PAGE */
 .all-recipes-wrapper {
   display: flex;
   justify-content: space-around;
+  margin-top: 50px;
 }
 
 aside {
@@ -183,6 +184,12 @@ aside {
   background: #aabda5;
   color: black;
   border-radius: 8px;
+}
+
+.no-saved-recipes-message, .no-recipe-found-message {
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 50px;
 }
 
 .hidden {
