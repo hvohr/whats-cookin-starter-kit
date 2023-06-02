@@ -153,16 +153,18 @@ homeButton.addEventListener('click', function () {
   randomizeHomePage();
 })
 
-window.onload = randomizeHomePage(), generateRandomUser(usersData1)
-
-
-//Event Handlers/Functions
-
 const generateRandomUser = users => {
   // currentUser = users[Math.floor(Math.random() * users.length)];
   currentUser = users[0];
   return currentUser
 }
+
+window.onload = randomizeHomePage(), generateRandomUser(usersData1)
+
+
+//Event Handlers/Functions
+
+
 
 function showSearchResults() {
   let searchValue = searchInput.value;
@@ -188,8 +190,15 @@ function showSearchResults() {
     };
 };
 
-const checkCurrentSavedRecipes= event => {
-  const recipeFound = currentUser.recipesToCook.some(recipe => recipe.name.includes(event.target.parentElement.id));
+const checkCurrentSavedRecipes = event => {
+  let recipeID;
+   recipesData1.forEach((recipe) => {
+    if (recipe.name === event.target.parentElement.id) {
+      recipeID = recipe.id
+    }
+    return recipeID
+  })
+  const recipeFound = currentUser.recipesToCook.some(recipe => recipe === recipeID);
   if (recipeFound) {
     removeHiddenClass([savedRedHeartButton]);
   } else {
@@ -227,15 +236,15 @@ function showHomePage() {
   removeHiddenClass([frontRecipeDisplay]);
 }
 
-const showSavedRecipes = (currentUser, recipesToCook) => {
-  if (!recipesToCook.length) {
+const showSavedRecipes = (array) => {
+  if (!array.length) {
     savedRecipeDisplay.innerHTML = `
     <div class="no-saved-recipes-message">
       <p> Hi, ${currentUser.name}! You currently have no saved recipes.</p>
     </div>`;
   } else {
     savedRecipeDisplay.innerHTML = '';
-    recipesToCook.forEach(recipe => {
+    array.forEach(recipe => {
       savedRecipeDisplay.innerHTML += `
       <div class="recipe-wrapper recipe" tabindex="0" id="${recipe.name}" >
         <img src="${recipe.image}" class="recipe" alt="${recipe.name}">
