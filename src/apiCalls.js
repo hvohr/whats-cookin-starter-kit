@@ -20,10 +20,26 @@ const getIngredients = () => {
     .catch((error) => alert(error))
 }
 
+const addPostRecipe = (postRecipe, currentUser) => {
+  fetch('http://localhost:3001/api/v1/usersRecipes', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(newSavedRecipe(postRecipe, currentUser))
+  })
+  .then(response => response.json())
+  .catch(error => alert(error))
+}
+
+const newSavedRecipe = (recipe, currentUser) => { 
+  return {
+    userID: currentUser.id, 
+    recipeID: recipe.id 
+  }
+}
 
 
 export {
-  // addPostRecipe,
+  addPostRecipe,
   getUsers,
   getIngredients,
   getRecipes
