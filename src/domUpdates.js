@@ -81,7 +81,7 @@ allFilterDisplay.addEventListener('click', function (event) {
 
 searchInput.addEventListener('keypress', function (e) {
   if (e.key === 'Enter') {
-    addHiddenClass([singleRecipeDisplay, saveWhiteHeartButton]);
+    addHiddenClass([singleRecipeDisplay, saveWhiteHeartButton, savedRedHeartButton]);
     showSearchResults();
   }
 });
@@ -161,10 +161,7 @@ const generateRandomUser = users => {
 
 window.onload = randomizeHomePage(), generateRandomUser(usersData1)
 
-
 //Event Handlers/Functions
-
-
 
 function showSearchResults() {
   let searchValue = searchInput.value;
