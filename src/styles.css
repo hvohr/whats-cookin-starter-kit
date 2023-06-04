@@ -143,6 +143,10 @@ aside {
   width: 20vh;
 }
 
+.checkbox {
+  cursor: pointer;
+}
+
 .all-recipes-display, .saved-recipe-display {
   display: flex;
   flex-direction: row;
@@ -164,8 +168,8 @@ aside {
 }
 
 .input-budget {
-  font-size: 13px;
-  margin-bottom: 30px;
+  /* font-size: 13px; */
+  margin-bottom: 80px;
   display: flex;
   align-items: center;
   flex-direction: column-reverse;
@@ -174,6 +178,13 @@ aside {
 .budget-input-box {
   width: 40px;
   margin-bottom: 16px;
+}
+
+.submit {
+  background-color: #D81159;
+  padding: 5px;
+  color: white;
+  cursor: pointer
 }
 
 .input-label {
