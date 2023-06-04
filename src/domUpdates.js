@@ -1,5 +1,5 @@
 //NOTE: Your DOM manipulation will occur in this file
-import { recipesfromName, recipesFromTag, findRecipe, calculateRecipeCost, recipeInstructions, shuffleData, displayIngredients } from "../src/recipeUtils";
+import { recipesfromName, recipesFromTag, findRecipe, calculateRecipeCost, recipeInstructions, shuffleData, displayIngredients, recipesFromPrice } from "../src/recipeUtils";
 import { recipesToCook, saveRecipe, deleteRecipe, addSavedRecipesToUser } from "../src/userUtils";
 import { getUsers, getIngredients, getRecipes, addPostRecipe } from "./apiCalls"
 
@@ -22,6 +22,8 @@ const savedRecipesButton = document.querySelector('.saved-recipes')
 const savedRecipeDisplay = document.querySelector('.saved-recipe-display')
 const clearButton = document.querySelector('.clear-search-button')
 const searchButton = document.querySelector('.search-button')
+const budgetInput = document.querySelector(".budget-input-box")
+const budgetInputForm = document.querySelector('.input-budget')
 
 //Event Listeners
 
@@ -39,10 +41,9 @@ allRecipesButton.addEventListener('click', event => {
 });
 
 savedRecipesButton.addEventListener('click', () => {
-  addHiddenClass([allRecipeDisplay, singleRecipeDisplay, saveWhiteHeartButton, savedRedHeartButton, frontRecipeDisplay, savedRecipesButton, searchInput]);
+  addHiddenClass([allRecipeDisplay, singleRecipeDisplay, saveWhiteHeartButton, savedRedHeartButton, frontRecipeDisplay, savedRecipesButton, searchInput, budgetInputForm]);
   removeHiddenClass([savedRecipeDisplay, savedSearchInput, allFilterDisplay, allRecipesButton]);
   let postDisplay = postToDisplay();
-  console.log(postDisplay)
   showSavedRecipes(postDisplay);
 })
 
@@ -145,6 +146,16 @@ savedRecipeDisplay.addEventListener('click', event => {
   }
 });
 
+budgetInputForm.addEventListener('submit', event => {
+    event.preventDefault()
+    const maxCost = budgetInput.value
+    if (isNaN(maxCost)) {
+      alert('Please insert a number')
+    } else {
+      renderFilteredRecipesByBudget(maxCost)
+    }
+})
+
 
 homeButton.addEventListener('click', function () {
   addHiddenClass([saveWhiteHeartButton, savedRedHeartButton, savedRecipeDisplay, singleRecipeDisplay, allFilterDisplay, savedSearchInput])
@@ -154,7 +165,6 @@ homeButton.addEventListener('click', function () {
 })
 
 const generateRandomUser = users => {
-  // currentUser = users[Math.floor(Math.random() * users.length)];
   currentUser = users[0];
   return currentUser
 }
@@ -252,6 +262,24 @@ const showSavedRecipes = (array) => {
       </div>`});
   }
 };
+
+const renderFilteredRecipesByBudget = (maxCost) => {
+  let parse = parseInt(maxCost)
+  const recipeFromCost = recipesFromPrice(recipesData1, parse, ingredientsData1)
+  allRecipeDisplay.innerHTML = '';
+  recipeFromCost.forEach(recipe => allRecipeDisplay.innerHTML += `
+  <div class="recipe-wrapper recipe" tabindex="0" id="${recipe.name}">
+    <img src="${recipe.image}" class="recipe" alt="${recipe.name}">
+    <div class="recipe-info recipe">
+    <p class="recipe">${recipe.name}</p>
+    </div>`)
+  if (!recipeFromCost.length) {
+    allRecipeDisplay.innerHTML = `
+    <div class="no-recipe-found-message">
+      <p>Sorry, ${currentUser.name}, no recipes meet this budget.</p>
+    </div>`
+  }
+}
 
 function renderFilteredSavedRecipes() {
   const savedTags = Array.from(checkCategories).filter((category) => category.checked).map(c => c.id)
