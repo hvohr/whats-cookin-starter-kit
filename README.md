@@ -14,7 +14,7 @@ In order to run this application:
 7. Copy and paste that local host link into web browser.
 
 ### Preview of App:
-![Preview](https://user-images.githubusercontent.com/122255250/240078072-ccc14e54-2365-420b-a4ee-396977f2f508.gif)
+![Preview](https://user-images.githubusercontent.com/122255250/243220061-ddd7a47a-c428-4143-809d-8ffae090de3a.gif)
 ### Context:
 We are currently on our third week in mod 2 in the Turing FE program, and we recieved this project during our second week. We recieved the second part of the project in our fourth week. A total of 40 hours were spent on this project.
 ### Contributors:
