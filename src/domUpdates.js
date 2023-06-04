@@ -37,7 +37,7 @@ const startFetch = () => {
 allRecipesButton.addEventListener('click', event => {
   showRecipes(event);
   addHiddenClass([saveWhiteHeartButton, savedRedHeartButton, savedRecipeDisplay, savedSearchInput, allRecipesButton])
-  removeHiddenClass([searchInput, savedRecipesButton])
+  removeHiddenClass([searchInput, savedRecipesButton, budgetInputForm])
 });
 
 savedRecipesButton.addEventListener('click', () => {
@@ -138,12 +138,6 @@ savedRecipeDisplay.addEventListener('click', event => {
     checkCurrentSavedRecipes(event)
     viewSelectedRecipe(event);
   }
-  if (event.target.classList.contains('delete-recipe-button')) {
-    const recipeName = event.target.previousElementSibling.innerText;
-    deleteRecipe(recipeName);
-    addSavedRecipesToUser(currentUser, recipesToCook);
-    showSavedRecipes(currentUser, recipesToCook);
-  }
 });
 
 budgetInputForm.addEventListener('submit', event => {
@@ -155,7 +149,6 @@ budgetInputForm.addEventListener('submit', event => {
       renderFilteredRecipesByBudget(maxCost)
     }
 })
-
 
 homeButton.addEventListener('click', function () {
   addHiddenClass([saveWhiteHeartButton, savedRedHeartButton, savedRecipeDisplay, singleRecipeDisplay, allFilterDisplay, savedSearchInput])
@@ -175,7 +168,7 @@ window.onload = randomizeHomePage(), generateRandomUser(usersData1)
 
 function showSearchResults() {
   let searchValue = searchInput.value;
-  removeHiddenClass([allRecipeDisplay, allFilterDisplay]);
+  removeHiddenClass([allRecipeDisplay, allFilterDisplay, budgetInputForm]);
   addHiddenClass([frontRecipeDisplay]);
   allRecipeDisplay.innerHTML = '';
     const searchedRecipes = recipesfromName(recipesData1, searchValue);
@@ -231,7 +224,6 @@ function showSavedSearchResults() {
           <img src="${recipe.image}" class="recipe alt="${recipe.name}">
           <div class="recipe-info recipe">
             <p class="recipe>${recipe.name}</p>
-            <button class="delete-recipe-button ${recipe.name}" name="${recipe.name}">🗑️</button>
           </div>
         </div>`;
     });
@@ -257,7 +249,6 @@ const showSavedRecipes = (array) => {
         <img src="${recipe.image}" class="recipe" alt="${recipe.name}">
         <div class="recipe-info recipe">
           <p class="recipe">${recipe.name}</p>
-          <button class="delete-recipe-button ${recipe.name}" name="${recipe.name}">🗑️</button>
         </div>
       </div>`});
   }
@@ -294,7 +285,6 @@ function renderFilteredSavedRecipes() {
       <img src="${recipe.image}" class="recipe" alt="${recipe.name}">
       <div class="recipe-info recipe">
       <p class="recipe">${recipe.name}</p>
-        <button class="delete-recipe-button ${recipe.name}" name="${recipe.name}">🗑️</button>
       </div>`)
   if (!savedFiltered.length) {
     savedRecipeDisplay.innerHTML = `
