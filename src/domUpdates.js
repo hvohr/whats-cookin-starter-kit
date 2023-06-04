@@ -37,7 +37,7 @@ const startFetch = () => {
 allRecipesButton.addEventListener('click', event => {
   showRecipes(event);
   addHiddenClass([saveWhiteHeartButton, savedRedHeartButton, savedRecipeDisplay, savedSearchInput, allRecipesButton])
-  removeHiddenClass([searchInput, savedRecipesButton])
+  removeHiddenClass([searchInput, savedRecipesButton, budgetInputForm])
 });
 
 savedRecipesButton.addEventListener('click', () => {
@@ -149,7 +149,6 @@ budgetInputForm.addEventListener('submit', event => {
       renderFilteredRecipesByBudget(maxCost)
     }
 })
-
 
 homeButton.addEventListener('click', function () {
   addHiddenClass([saveWhiteHeartButton, savedRedHeartButton, savedRecipeDisplay, singleRecipeDisplay, allFilterDisplay, savedSearchInput])
