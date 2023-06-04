@@ -26,6 +26,7 @@ nav {
   justify-content: center;
   align-items: center;
   justify-content: space-around;
+  box-shadow: 0 4px 20px -2px #A2AEBB;
 }
 
 button {
@@ -68,7 +69,7 @@ button:hover {
   align-items: center;
 }
 
-.clear-search-button, .save-recipe-btn {
+.clear-search-button, .save-recipe-btn, .saved-recipe-btn {
   padding: 12px 32px 12px 32px;
 }
 
@@ -141,6 +142,7 @@ aside {
   align-items: center;
   height: 80vh;
   width: 20vh;
+  margin-top: 50px;
 }
 
 .checkbox {
@@ -168,8 +170,7 @@ aside {
 }
 
 .input-budget {
-  /* font-size: 13px; */
-  margin-bottom: 80px;
+  margin-bottom: 96px;
   display: flex;
   align-items: center;
   flex-direction: column-reverse;
@@ -177,14 +178,17 @@ aside {
 
 .budget-input-box {
   width: 40px;
-  margin-bottom: 16px;
+  margin-top: 4px;
+  margin-bottom: 8px;
 }
 
 .submit {
   background-color: #D81159;
   padding: 5px;
   color: white;
-  cursor: pointer
+  border-radius: 10px;
+  border: none;
+  cursor: pointer;
 }
 
 .input-label {
