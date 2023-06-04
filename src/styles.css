@@ -18,7 +18,8 @@ h1 {
 
 nav {
   overflow: hidden;
-  background-color: #aabda5;
+  background-color: #98cafa;
+  ;
   height: 100px;
   width: 100vw;
   display: flex;
@@ -199,7 +200,7 @@ aside {
 .ingredient-box,
 .instruction-box {
   padding: 8px;
-  background: #aabda5;
+  background: #98cafa;
   color: black;
   border-radius: 8px;
 }
